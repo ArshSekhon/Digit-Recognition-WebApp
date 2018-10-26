@@ -2,7 +2,7 @@ import { Model } from 'keras-js';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import './WritingCanvas.css'
-import * as tf from'@tensorflow/tfjs' 
+import * as tf from'@tensorflow/tfjs'  
 
 class WritingCanvas extends Component{
 
@@ -31,6 +31,9 @@ class WritingCanvas extends Component{
         this.getMinBox = this.getMinBox.bind(this);
         this.printImageTensor = this.printImageTensor.bind(this);
         this.coords = [];
+
+
+        
 
         this.model = new Model({
           filepath: 'model.bin',
@@ -65,6 +68,11 @@ class WritingCanvas extends Component{
         if(this.state.isDrawing){
             ctx.strokeStyle = this.state.color;
 
+            this.coords.push({
+              'x':e.nativeEvent.offsetX,
+              'y':e.nativeEvent.offsetY
+              }); 
+
             ctx.beginPath();
             ctx.moveTo(this.state.lastX, this.state.lastY);
             ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
@@ -83,13 +91,6 @@ class WritingCanvas extends Component{
                 <canvas id="draw" width={this.props.width} height={this.props.height} 
                 onMouseMove={(e)=>{
                             this.draw(e); 
-                            if(e.nativeEvent.offsetX >=0 && e.nativeEvent.offsetY >= 0)  
-                                        {	  
-                                          this.coords.push({
-                                                            'x':e.nativeEvent.offsetX,
-                                                            'y':e.nativeEvent.offsetY
-                                                            }); 
-                                        }
                           }
                         }
                         onMouseDown={(e) => {
@@ -131,26 +132,29 @@ class WritingCanvas extends Component{
                 <input type="Button" onClick={this.saveImage} value="Save Canvas" className="save-button" onChange={() => {}}/>
 
                 <input type="Button" onClick={this.clearCanvas} value="Clear Canvas" className="clear-button" onChange={() => {}}/>
-
+                <div>
+                  <canvas height={28} width={28} id="minst" style={{"scale":"10"}}></canvas>
+                </div>
+              
             </div>
         )
     }
     saveImage(e){
-        var image = new Image();
-        image.src = this.canvas().toDataURL("image/png");
+        // var image = new Image();
+        // image.src = this.canvas().toDataURL("image/png");
 
-        var data = atob( this.canvas().toDataURL("image/png").substring( "data:image/png;base64,".length ) ),
-            asArray = new Uint8Array(data.length);
+        // var data = atob( this.canvas().toDataURL("image/png").substring( "data:image/png;base64,".length ) ),
+        //     asArray = new Uint8Array(data.length);
 
-        for( var i = 0, len = data.length; i < len; ++i ) {
-            asArray[i] = data.charCodeAt(i);
-        }
+        // for( var i = 0, len = data.length; i < len; ++i ) {
+        //     asArray[i] = data.charCodeAt(i);
+        // }
 
-        var blob = new Blob( [ asArray.buffer ], {type: "image/png"} );
+        // var blob = new Blob( [ asArray.buffer ], {type: "image/png"} );
 
-        var img = document.createElement("img");
-        img.src = (window.webkitURL || window.URL).createObjectURL( blob );
-        document.body.appendChild(img);
+        // var img = document.createElement("img");
+        // img.src = (window.webkitURL || window.URL).createObjectURL( blob );
+        // document.body.appendChild(img);
 
         //image.resize(28,28);
         //the minimum boudning box around the current drawing
@@ -163,14 +167,41 @@ class WritingCanvas extends Component{
         console.log(mbb,dpi)
 
         //extract the image data 
-        this.printImageTensor(mbb.min.x*dpi, mbb.min.y*dpi, (mbb.max.x-mbb.min.x)*dpi, (mbb.max.y-mbb.min.y)*dpi)
-        //this.printImageTensor(this.ctx().getImageData(0,0,500,500))
+        //this.printImageTensor(mbb.min.x*dpi, mbb.min.y*dpi, (mbb.max.x-mbb.min.x)*dpi, (mbb.max.y-mbb.min.y)*dpi)
+        var height = (mbb.max.y-mbb.min.y)*dpi+100;
+        var width = (mbb.max.x-mbb.min.x)*dpi+100;
+        var left = mbb.min.x*dpi-50;
+        var top = mbb.min.y*dpi-50;
+        var margin = 50;
+        
+        // if(top-margin>0) 
+        //   top =top-margin;
+        // else 
+        //   top = 0; 
+
+        // if(left-margin>0) 
+        //   left =left-margin;
+        // else 
+        //   top = 0; 
+
+        // if(width+margin<(this.props.width-left)) 
+        //   width = width+margin;
+        // else 
+        //   width = this.props.width - left;
+
+        // if(height+margin<(this.props.height-top)) 
+        //   height = height+margin;
+        // else 
+        //   height = this.props.height - top;  
+        console.log("left",left, "top", top, "height",height,"width", width)
+        this.printImageTensor(this.ctx().getImageData(left, top, width, height))
     }
 
     clearCanvas(e){
         const canvas = this.canvas();
         const ctx = this.ctx(canvas);
 
+        this.coords = [];
         ctx.clearRect(0,0,canvas.width, canvas.height);
     }
     
@@ -202,10 +233,22 @@ class WritingCanvas extends Component{
       for(var i=3;i<tensor.length;i+=4){
         
         row.push(tensor[i])
-      }
+      } 
+      var minstContext = document.querySelector("#minst").getContext("2d");
+      var imgData = minstContext.getImageData(0,0,28,28)
       
-      
+      console.log("imag", imgData.data.length)
+      for (var i=0;i<imgData.data.length;i+=4)
+        { 
+          imgData.data[i+0]=0;
+          imgData.data[i+1]=0;
+          imgData.data[i+2]=0;
+          imgData.data[i+3]=255*tensor[i+3];
+        } 
+        minstContext.putImageData(imgData,0,0,0,0,28,28);
 
+
+        
       const model = new Model({
         filepath: 'model.bin',
       });
@@ -238,7 +281,7 @@ class WritingCanvas extends Component{
     {
     return tf.tidy(()=>{
         //convert the image data to a tensor 
-        var tensor = tf.fromPixels(this.canvas(), 4)
+        var tensor = tf.fromPixels(imgData, 4)
         //resize to 28 x 28 
         var resized = tf.image.resizeBilinear(tensor, [28, 28]).toFloat()
         // Normalize the image 
@@ -246,6 +289,7 @@ class WritingCanvas extends Component{
         var normalized = (resized.div(offset));
         //We add a dimension to get a batch shape 
         return normalized
+        //return resized
     })
     }
 
