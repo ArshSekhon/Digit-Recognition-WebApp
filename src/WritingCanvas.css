@@ -13,12 +13,13 @@
 }
 
 .clear-button{
-    background: black;
+    /*background: black;*/
+    background: #2295de;
     border: 0;
     color: white;
     padding: 16px 42px;
-    font-size: 1.3em;
-    margin: 21px;
+    /*display: block;*/
+    font-size: 1.3em; 
     border-radius: 20em;
     transition: 0.15s ease-in;
     cursor:pointer;

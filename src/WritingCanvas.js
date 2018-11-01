@@ -2,7 +2,9 @@ import { Model } from 'keras-js';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import './WritingCanvas.css'
-import * as tf from'@tensorflow/tfjs'  
+import * as tf from'@tensorflow/tfjs'
+
+import Modal from 'react-responsive-modal'  
 
 class WritingCanvas extends Component{
 
@@ -17,17 +19,18 @@ class WritingCanvas extends Component{
             controlDisplay: "none",
             controlLefb: "100%",
             customColor: false,
-            color: "#000000",
+            color: "#n",
             customStroke: false,
             maxWidth: 100,
-            minWidth: 20,
+            minWidth: 30,
             width: this.props.width,
-            height: this.props.height
+            height: this.props.height,
+            predictionsOpen:false,
         };
 
         this.draw = this.draw.bind(this);
         this.clearCanvas = this.clearCanvas.bind(this);
-        this.saveImage = this.saveImage.bind(this); 
+        this.predictDigit = this.predictDigit.bind(this); 
         this.getMinBox = this.getMinBox.bind(this);
         this.printImageTensor = this.printImageTensor.bind(this);
         this.coords = [];
@@ -39,6 +42,15 @@ class WritingCanvas extends Component{
           filepath: 'model.bin',
         });
     }
+
+
+    onOpenModal = () => {
+      this.setState({ predictionsOpen: true });
+    };
+  
+    onCloseModal = () => {
+      this.setState({ predictionsOpen: false });
+    };
 
     canvas () {
         return document.querySelector("#draw");
@@ -120,44 +132,27 @@ class WritingCanvas extends Component{
                                                     'y':e.nativeEvent.offsetY
                                                     }); 
                                 }
-                            
+                                this.predictDigit(e);
                             }
                         }
                         onMouseOut={
-                            () => this.setState({isDrawing: false})
+                            (e) => {
+                              this.setState({isDrawing: false});
+                              this.predictDigit(e);
+                            }
                         }
                         
                     className="writing-canvas"/>
-
-                <input type="Button" onClick={this.saveImage} value="Save Canvas" className="save-button" onChange={() => {}}/>
-
-                <input type="Button" onClick={this.clearCanvas} value="Clear Canvas" className="clear-button" onChange={() => {}}/>
                 <div>
                   <canvas height={28} width={28} id="minst" style={{"scale":"10"}}></canvas>
                 </div>
+                <input type="Button" onClick={this.clearCanvas} value="Clear Canvas" className="clear-button" onChange={() => {}}/>
+                
               
             </div>
         )
     }
-    saveImage(e){
-        // var image = new Image();
-        // image.src = this.canvas().toDataURL("image/png");
-
-        // var data = atob( this.canvas().toDataURL("image/png").substring( "data:image/png;base64,".length ) ),
-        //     asArray = new Uint8Array(data.length);
-
-        // for( var i = 0, len = data.length; i < len; ++i ) {
-        //     asArray[i] = data.charCodeAt(i);
-        // }
-
-        // var blob = new Blob( [ asArray.buffer ], {type: "image/png"} );
-
-        // var img = document.createElement("img");
-        // img.src = (window.webkitURL || window.URL).createObjectURL( blob );
-        // document.body.appendChild(img);
-
-        //image.resize(28,28);
-        //the minimum boudning box around the current drawing
+    predictDigit(e){ 
         
         var mbb = this.getMinBox()
         //cacluate the dpi of the current window 
@@ -166,35 +161,34 @@ class WritingCanvas extends Component{
 
         console.log(mbb,dpi)
 
-        //extract the image data 
-        //this.printImageTensor(mbb.min.x*dpi, mbb.min.y*dpi, (mbb.max.x-mbb.min.x)*dpi, (mbb.max.y-mbb.min.y)*dpi)
-        var height = (mbb.max.y-mbb.min.y)*dpi+100;
-        var width = (mbb.max.x-mbb.min.x)*dpi+100;
-        var left = mbb.min.x*dpi-50;
-        var top = mbb.min.y*dpi-50;
+        //extract the image data  
+        var height = (mbb.max.y-mbb.min.y)*dpi;
+        var width = (mbb.max.x-mbb.min.x)*dpi;
+
+        var padding_determinee = (height>width)?height:width;
+        var margin_ratio=3.0/7.0;
+
+        var top_left_adjustment =  margin_ratio * padding_determinee;
+        top_left_adjustment = (top_left_adjustment<100)?100:top_left_adjustment;
+
+        var height_width_adjustment = top_left_adjustment * 2;
+
+
+        console.log("height_width_adjustment",height_width_adjustment,"top_left_adjustment",top_left_adjustment);
+
+        height = (mbb.max.y-mbb.min.y) * dpi + height_width_adjustment;
+        width = (mbb.max.x-mbb.min.x)*dpi+ height_width_adjustment;
+
+
+        var left = mbb.min.x*dpi-top_left_adjustment;
+        var top = mbb.min.y*dpi-top_left_adjustment;
         var margin = 50;
-        
-        // if(top-margin>0) 
-        //   top =top-margin;
-        // else 
-        //   top = 0; 
-
-        // if(left-margin>0) 
-        //   left =left-margin;
-        // else 
-        //   top = 0; 
-
-        // if(width+margin<(this.props.width-left)) 
-        //   width = width+margin;
-        // else 
-        //   width = this.props.width - left;
-
-        // if(height+margin<(this.props.height-top)) 
-        //   height = height+margin;
-        // else 
-        //   height = this.props.height - top;  
-        console.log("left",left, "top", top, "height",height,"width", width)
-        this.printImageTensor(this.ctx().getImageData(left, top, width, height))
+           
+        if(height>0 && width>0)
+          try{
+            this.printImageTensor(this.ctx().getImageData(left, top, width, height))
+          }catch(e){}
+          
     }
 
     clearCanvas(e){
@@ -203,6 +197,9 @@ class WritingCanvas extends Component{
 
         this.coords = [];
         ctx.clearRect(0,0,canvas.width, canvas.height);
+
+        var minstContext = document.querySelector("#minst").getContext("2d");
+        minstContext.clearRect(0,0,28,28)
     }
     
     async printImageTensor(data){
@@ -249,13 +246,10 @@ class WritingCanvas extends Component{
 
 
         
-      const model = new Model({
-        filepath: 'model.bin',
-      });
   
       // Perform a prediction and write the results to the console.
-      model.ready()
-        .then(() => model.predict({
+      this.model.ready()
+        .then(() => this.model.predict({
           input: new Float32Array(row),
         }))
         .then(({ output }) => {
@@ -266,9 +260,14 @@ class WritingCanvas extends Component{
               predictionProbability = probability;
               predictedDigit = digit;
             }
+
+            console.log(
+              `Predicted ${digit} with probability ${probability.toFixed(3)}.`,
+            );
           });
           console.log(
-            `Predicted ${predictedDigit} with probability ${predictionProbability.toFixed(3)}.`,
+            `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\
+            Final Prediction is ${predictedDigit}!!!!.\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`,
           );
         })
         .catch((error) => {
