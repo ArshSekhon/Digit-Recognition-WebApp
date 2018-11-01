@@ -7,6 +7,8 @@
     "gh-pages": "^2.0.1",
     "keras-js": "^1.0.3",
     "react": "^16.5.2",
+    "react-d3-components": "^0.9.1",
+    "react-device-detect": "^1.6.1",
     "react-dom": "^16.5.2",
     "react-responsive-modal": "^3.5.0",
     "react-scripts": "2.0.4"
