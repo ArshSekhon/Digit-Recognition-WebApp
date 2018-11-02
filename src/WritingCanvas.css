@@ -1,15 +1,18 @@
-#minst{
-    transform: translate(50%,50%);
+#mnist-canvas{
     background: #efefef;
-    display: block;
-    border-radius: 1px;
-    box-shadow: inset 0 0 1px 0px #00000030;
+    border-radius: 6px;
+    box-shadow: inset 0 0 6px 0px #00000030;  
+    max-width: 350px;
+    max-height: 350px;
+    min-height: 350px;
+    min-width: 350px;
+    margin-left: 10%;
 }
 .writing-canvas{
-    background: #efefef;
-    display: block;
+    background: #efefef; 
     border-radius: 6px;
-    box-shadow: inset 0 0 6px 0px #00000030;
+    box-shadow: inset 0 0 6px 0px #00000030; 
+    cursor: crosshair;
 }
 
 .clear-button{
@@ -18,14 +21,20 @@
     border: 0;
     color: white;
     padding: 16px 42px;
-    /*display: block;*/
+    display: block;
     font-size: 1.3em; 
     border-radius: 20em;
     transition: 0.15s ease-in;
     cursor:pointer;
     outline: 0 none;
+    margin:auto;
 }
-
+.tooltip {
+    background: #ffffffb5;
+    box-shadow: 0 0 2px 1px #0000001f;
+    padding: 2%;
+    margin-top: 3%;
+}
 .clear-button:hover{
     box-shadow: 0 3px 6px 2px #0000004f;
 
@@ -36,8 +45,7 @@
     border: 0;
     color: white;
     padding: 16px 42px;
-    font-size: 1.3em;
-    margin: 21px;
+    font-size: 1.3em; 
     border-radius: 20em;
     transition: 0.15sss ease-in;
     cursor:pointer;
@@ -47,4 +55,12 @@
 .save-button:hover{
     box-shadow: 0 3px 6px 2px #0000004f;
 
+}
+h2.col-sm-12.align-self-start {
+    font-size: 1.4em;
+    font-weight: 100;
+    letter-spacing: 0.1em;
+}
+.clear-button-row{
+    margin-top: 5%;
 }

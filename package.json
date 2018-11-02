@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@tensorflow/tfjs": "^0.13.1",
+    "bootstrap": "^4.1.3",
     "gh-pages": "^2.0.1",
     "keras-js": "^1.0.3",
     "react": "^16.5.2",

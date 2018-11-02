@@ -6,23 +6,14 @@ import * as tf from'@tensorflow/tfjs'
 import * as ReactD3 from 'react-d3-components'
 import {isMobile} from 'react-device-detect'
 
+
 class WritingCanvas extends Component{
 
     constructor(props) {
         super(props);
-        console.log("isMobile",isMobile)
-        this.defaultPredictions =[
-          {x: '0', y: 0},
-          {x: '1', y: 0},
-          {x: '2', y: 0},
-          {x: '3', y: 0},
-          {x: '4', y: 0},
-          {x: '5', y: 0},
-          {x: '6', y: 0},
-          {x: '7', y: 0},
-          {x: '8', y: 0},
-          {x: '9', y: 0}];
-
+        console.log("isMobile",isMobile) 
+        
+        console.log(this.defaultPredictions)
         this.state = {
             isDrawing: false,
             lastX: 0,
@@ -34,18 +25,28 @@ class WritingCanvas extends Component{
             color: "#n",
             customStroke: false,
             maxWidth: 100,
-            minWidth: 30,
+            minWidth: 20,
             width: this.props.width,
             height: this.props.height,
             predictionsOpen:false,
-            predictions:this.defaultPredictions,
+            predictions:[
+              {x: '0', y: 0},
+              {x: '1', y: 0},
+              {x: '2', y: 0},
+              {x: '3', y: 0},
+              {x: '4', y: 0},
+              {x: '5', y: 0},
+              {x: '6', y: 0},
+              {x: '7', y: 0},
+              {x: '8', y: 0},
+              {x: '9', y: 0}]
         };
 
         this.draw = this.draw.bind(this);
         this.clearCanvas = this.clearCanvas.bind(this);
         this.predictDigit = this.predictDigit.bind(this); 
         this.getMinBox = this.getMinBox.bind(this);
-        this.printImageTensor = this.printImageTensor.bind(this);
+        this.processImageWithModel = this.processImageWithModel.bind(this);
         this.coords = [];
 
         this.model = new Model({
@@ -108,9 +109,13 @@ class WritingCanvas extends Component{
 
 
     render () { 
-        return (
-            <div>
-                <canvas id="draw" width={this.props.width} height={this.props.height} 
+      return (
+        <div className="container">
+            <div className="row justify-content-center align-items-center align-self-center">
+                <div className="col-sm-4">
+                  <div className="row"><h2 className="col-sm-12 align-self-start">DRAW HERE</h2></div>
+                  
+                  <canvas id="draw" className="row writing-canvas" width={this.props.width} height={this.props.height} 
                         onMouseMove={(e)=>{
                                     this.draw(e); 
                         }}
@@ -145,22 +150,38 @@ class WritingCanvas extends Component{
                               this.setState({isDrawing: false});
                               this.predictDigit(e);
                             }
-                        }
-                        
-                    className="writing-canvas"/>
-                <div>
-                  <canvas height={28} width={28} id="minst" style={{"scale":"10"}}></canvas>
+                        }/>
+                  </div>
+                <div className="predictions-bar-graph col-sm-4">
+                  <div className="row"><h2 className="col-sm-12 align-self-start">PREDICTIONS</h2></div>
+                    <ReactD3.BarChart 
+                    className="row"
+                      data={[{
+                          label: 'Numbers',
+                          values: this.state.predictions
+                      }]}
+                      tooltipHtml={(x,y,y0)=>{return "Probability of being "+x+" is "+Math.round(parseFloat(y0) * 10)/10+"% "}}
+                      width={this.state.width}
+                      height={this.state.height}
+                      xAxis={{label: "Digit"}}
+                      yAxis={{label: "Probability"}}
+                      margin={{top: 10, bottom: 50, left: 50, right: 10}}/>
                 </div>
-                <input type="Button" onClick={this.clearCanvas} value="Clear Canvas" className="clear-button" onChange={() => {}}/>
-                <ReactD3.BarChart
-                  data={[{
-                      label: 'Numbers',
-                      values: this.state.predictions
-                  }]}
-                  width={400}
-                  height={400}
-                  margin={{top: 10, bottom: 50, left: 50, right: 10}}/>
+ 
+                <div className="col-sm-4">
+                  <div className="row"><h2 className="col-sm-12 align-self-start">WHAT NEURAL NETWORK SAW</h2></div>
+                  <canvas height={28} width={28} id="mnist-canvas" className="row"></canvas>
+                </div>
+
+                
             </div>
+            <div className="row align-items-center clear-button-row">
+                  <div className="col-sm-12 align-self-center">
+                    <button onClick={this.clearCanvas} className="btn clear-button" onChange={() => {}}>Clear Everything</button>   
+                  </div>
+            </div>
+          </div>
+            
         )
     }
     predictDigit(e){ 
@@ -169,8 +190,7 @@ class WritingCanvas extends Component{
         //cacluate the dpi of the current window 
         const dpi = window.devicePixelRatio;
 
-
-        console.log(mbb,dpi)
+ 
 
         //extract the image data  
         var height = (mbb.max.y-mbb.min.y)*dpi;
@@ -197,7 +217,7 @@ class WritingCanvas extends Component{
            
         if(height>0 && width>0)
           try{
-            this.printImageTensor(this.ctx().getImageData(left, top, width, height))
+            this.processImageWithModel(this.ctx().getImageData(left, top, width, height))
           }catch(e){}
           
     }
@@ -209,14 +229,22 @@ class WritingCanvas extends Component{
         this.coords = [];
         ctx.clearRect(0,0,canvas.width, canvas.height);
 
-        var minstContext = document.querySelector("#minst").getContext("2d");
-        minstContext.clearRect(0,0,28,28)
-        console.log(this.defaultPredictions)
-        this.setState({predictions: this.defaultPredictions});
-        console.log(this.state.predictions)
+        var mnistContext = document.querySelector("#mnist-canvas").getContext("2d");
+        mnistContext.clearRect(0,0,28,28) 
+ 
+        this.setState({predictions:[{x: '0', y: 0},
+                                    {x: '1', y: 0},
+                                    {x: '2', y: 0},
+                                    {x: '3', y: 0},
+                                    {x: '4', y: 0},
+                                    {x: '5', y: 0},
+                                    {x: '6', y: 0},
+                                    {x: '7', y: 0},
+                                    {x: '8', y: 0},
+                                    {x: '9', y: 0}]});
     }
     
-    async printImageTensor(data){
+    async processImageWithModel(data){
       var tensor = await this.preprocess(data).data();
       var pixelData = []; 
       
@@ -225,8 +253,8 @@ class WritingCanvas extends Component{
         
         row.push(tensor[i])
       } 
-      var minstContext = document.querySelector("#minst").getContext("2d");
-      var imgData = minstContext.getImageData(0,0,28,28)
+      var mnistContext = document.querySelector("#mnist-canvas").getContext("2d");
+      var imgData = mnistContext.getImageData(0,0,28,28)
       
       console.log("imag", imgData.data.length)
       for (var i=0;i<imgData.data.length;i+=4)
@@ -236,7 +264,7 @@ class WritingCanvas extends Component{
           imgData.data[i+2]=0;
           imgData.data[i+3]=255*tensor[i+3];
         } 
-        minstContext.putImageData(imgData,0,0,0,0,28,28);
+        mnistContext.putImageData(imgData,0,0,0,0,28,28);
 
 
         
@@ -257,13 +285,13 @@ class WritingCanvas extends Component{
               predictionProbability = probability;
               predictedDigit = digit;
             }
-            previousPredictions[digit].y = probability;
+            previousPredictions[digit].y = probability*100;
 
             console.log(
               `Predicted ${digit} with probability ${probability.toFixed(3)}.`,
             );
           });
-
+          
           this.setState({predictions:previousPredictions})
           console.log(
             `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\
