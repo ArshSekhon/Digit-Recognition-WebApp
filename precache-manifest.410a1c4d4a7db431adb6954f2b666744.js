@@ -8,23 +8,23 @@ self.__precacheManifest = [
     "url": "/Digit-Recognition-WebApp/static/js/runtime~main.b33897f6.js"
   },
   {
-    "revision": "496dece0b3be56769a24",
-    "url": "/Digit-Recognition-WebApp/static/js/main.496dece0.chunk.js"
+    "revision": "615ca398e987cea18925",
+    "url": "/Digit-Recognition-WebApp/static/js/main.615ca398.chunk.js"
   },
   {
     "revision": "53c5681b13bff4fb34f1",
     "url": "/Digit-Recognition-WebApp/static/js/1.53c5681b.chunk.js"
   },
   {
-    "revision": "496dece0b3be56769a24",
-    "url": "/Digit-Recognition-WebApp/static/css/main.fb04d602.chunk.css"
+    "revision": "615ca398e987cea18925",
+    "url": "/Digit-Recognition-WebApp/static/css/main.6ba32f2e.chunk.css"
   },
   {
     "revision": "53c5681b13bff4fb34f1",
     "url": "/Digit-Recognition-WebApp/static/css/1.926c42c2.chunk.css"
   },
   {
-    "revision": "1fda212de667df2def1983ea1156aa62",
+    "revision": "bf5df99bd23a6eb4bd7ffb78f8f123b9",
     "url": "/Digit-Recognition-WebApp/index.html"
   }
 ];
