@@ -8,6 +8,9 @@
     min-width: 350px;
     margin-left: 10%;
 }
+.x28Canvas{
+  margin-left: 10%;
+}
 .writing-canvas{
     background: #efefef; 
     border-radius: 6px;
@@ -16,8 +19,8 @@
 }
 
 .clear-button{
-    /*background: black;*/
-    background: #2295de;
+    background: black;
+    /*background: #2295de;*/
     border: 0;
     color: white;
     padding: 16px 42px;
@@ -63,4 +66,7 @@ h2.col-sm-12.align-self-start {
 }
 .clear-button-row{
     margin-top: 5%;
+}
+.predictions-bar-graph rect.bar {
+    fill: black;
 }

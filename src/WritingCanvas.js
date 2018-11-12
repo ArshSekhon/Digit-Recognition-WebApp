@@ -25,7 +25,7 @@ class WritingCanvas extends Component{
             color: "#n",
             customStroke: false,
             maxWidth: 100,
-            minWidth: 20,
+            minWidth: 25,
             width: this.props.width,
             height: this.props.height,
             predictionsOpen:false,
@@ -169,7 +169,7 @@ class WritingCanvas extends Component{
                 </div>
  
                 <div className="col-sm-4">
-                  <div className="row"><h2 className="col-sm-12 align-self-start">WHAT NEURAL NETWORK SAW</h2></div>
+                  <div className="row x28Canvas"><h2 className="col-sm-12 align-self-start">WHAT NEURAL NETWORK SAW</h2></div>
                   <canvas height={28} width={28} id="mnist-canvas" className="row"></canvas>
                 </div>
 

@@ -6,6 +6,11 @@
   animation: App-logo-spin infinite 20s linear;
   height: 40vmin;
 }
+.App-title{
+  font-size: 3em;
+  font-weight: 300;
+  margin-bottom: 3%;
+}
 
 .App-header {
   background-color: #282c34;

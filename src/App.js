@@ -29,9 +29,10 @@ class App extends Component {
 
     return (
       <div className="App">
+        <h1 className="App-title">HANDWRITTEN DIGIT RECOGNIZER</h1>
         <Modal open={helpOpen} className="help-modal" onClose={this.onCloseModal} center>
-            <h2 className="help-app-title">Hand-Written Digit Recogniser</h2>
-            <p className="help-app-intro-body">Draw any digit 0-9 using your mouse or touch-screen and a nueral network will predict what you drew. For best results, please draw large and vertically straight characters at center of canvas. 
+            <h2 className="help-app-title">Hand-Written Digit Recognizer</h2>
+            <p className="help-app-intro-body">Draw any digit 0-9 using your mouse or touch-screen and a nueral network will predict what you drew. <strong>For best results, please draw large and vertically straight characters at center of canvas.</strong>
               Feel free to experiment with different shapes and forms for digits.
             </p>
             <h3 className="help-app-under-the-hood-title">Under the Hood</h3>
