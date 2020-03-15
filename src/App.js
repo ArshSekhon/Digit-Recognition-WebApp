@@ -1,9 +1,8 @@
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './assets/logo.svg';
 import './App.css';
-import WritingCanvas from './WritingCanvas.js'
-import sample from './sample';
+import WritingCanvas from './components/WritingCanvas.js' 
 import Modal from 'react-responsive-modal'
 
 class App extends Component {

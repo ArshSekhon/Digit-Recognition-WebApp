@@ -115,7 +115,7 @@ class WritingCanvas extends Component{
                 <div className="col-sm-4">
                   <div className="row"><h2 className="col-sm-12 align-self-start">DRAW HERE</h2></div>
                   
-                  <canvas id="draw" className="row writing-canvas" width={this.props.width} height={this.props.height} 
+                  <canvas id="draw" className="writing-canvas" width={this.props.width} height={this.props.height} 
                         onMouseMove={(e)=>{
                                     this.draw(e); 
                         }}
