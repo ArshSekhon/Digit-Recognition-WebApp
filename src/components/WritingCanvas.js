@@ -10,10 +10,7 @@ import {isMobile} from 'react-device-detect'
 class WritingCanvas extends Component{
 
     constructor(props) {
-        super(props);
-        console.log("isMobile",isMobile) 
-        
-        console.log(this.defaultPredictions)
+        super(props); 
         this.state = {
             isDrawing: false,
             lastX: 0,
@@ -109,7 +106,8 @@ class WritingCanvas extends Component{
 
 
     render () { 
-      return (
+      /*
+      
         <div className="container">
             <div className="row justify-content-center align-items-center align-self-center">
                 <div className="col-sm-4">
@@ -180,6 +178,78 @@ class WritingCanvas extends Component{
                     <button onClick={this.clearCanvas} className="btn clear-button" onChange={() => {}}>Clear Everything</button>   
                   </div>
             </div>
+          </div>
+      
+      */
+      return (
+          <div className="digit-recognizer-container"> 
+                <div className="digit-recognizer-sub-container draw-here-container">
+                  <div className="row"><h2 className="col-sm-12 align-self-start">DRAW HERE</h2></div>
+                  
+                  <canvas id="draw" className="writing-canvas" width={this.props.width} height={this.props.height} 
+                        onMouseMove={(e)=>{
+                                    this.draw(e); 
+                        }}
+                        onMouseDown={(e) => {
+                            this.setState({
+                                isDrawing: true,
+                                lastX: e.nativeEvent.offsetX,
+                                lastY: e.nativeEvent.offsetY
+                            });
+                            if(e.nativeEvent.offsetX >=0 && e.nativeEvent.offsetY >= 0)  
+                            {	  
+                              this.coords.push({
+                                                'x':e.nativeEvent.offsetX,
+                                                'y':e.nativeEvent.offsetY
+                                                }); 
+                            }}
+                        }
+                        onMouseUp={
+                            (e) => {this.setState({isDrawing: false})
+                                if(e.nativeEvent.offsetX >=0 && e.nativeEvent.offsetY >= 0)  
+                                {	  
+                                  this.coords.push({
+                                                    'x':e.nativeEvent.offsetX,
+                                                    'y':e.nativeEvent.offsetY
+                                                    }); 
+                                }
+                                this.predictDigit(e);
+                            }
+                        }
+                        onMouseOut={
+                            (e) => {
+                              this.setState({isDrawing: false});
+                              this.predictDigit(e);
+                            }
+                        }/>
+                  </div>
+                <div className="predictions-bar-graph col-sm-4">
+                  <div className="row"><h2 className="col-sm-12 align-self-start">PREDICTIONS</h2></div>
+                    <ReactD3.BarChart 
+                    className="row"
+                      data={[{
+                          label: 'Numbers',
+                          values: this.state.predictions
+                      }]}
+                      tooltipHtml={(x,y,y0)=>{return "Probability of being "+x+" is "+Math.round(parseFloat(y0) * 10)/10+"% "}}
+                      width={this.state.width}
+                      height={this.state.height}
+                      xAxis={{label: "Digit"}}
+                      yAxis={{label: "Probability"}}
+                      margin={{top: 10, bottom: 50, left: 50, right: 10}}/>
+                </div>
+ 
+                <div className="col-sm-4">
+                  <div className="row x28Canvas"><h2 className="col-sm-12 align-self-start">WHAT NEURAL NETWORK SAW</h2></div>
+                  <canvas height={28} width={28} id="mnist-canvas" className="row"></canvas>
+                </div>
+
+                
+            </div>
+            <div className="row align-items-center clear-button-row">
+                  <div className="col-sm-12 align-self-center">
+                    <button onClick={this.clearCanvas} className="btn clear-button" onChange={() => {}}>Clear Everything</button>   
+                  </div> 
           </div>
             
         )
