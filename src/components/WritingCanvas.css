@@ -6,10 +6,10 @@
     max-height: 350px;
     min-height: 350px;
     min-width: 350px;
-    margin-left: 10%;
+    margin: auto;
 }
 .x28Canvas{
-  margin-left: 10%;
+    margin: auto;
 }
 .writing-canvas{
     background: #efefef; 
@@ -31,6 +31,7 @@
     cursor:pointer;
     outline: 0 none;
     margin:auto;
+    margin-bottom: 10% !important;
 }
 .tooltip {
     background: #ffffffb5;
@@ -67,6 +68,12 @@ h2.col-sm-12.align-self-start {
 .clear-button-row{
     margin-top: 5%;
 }
-.predictions-bar-graph rect.bar {
+.prediction-graph-container rect.bar {
     fill: black;
+}
+.digit-recognizer-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }

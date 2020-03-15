@@ -31,8 +31,11 @@ class App extends Component {
         <h1 className="App-title">HANDWRITTEN DIGIT RECOGNIZER</h1>
         <Modal open={helpOpen} className="help-modal" onClose={this.onCloseModal} center>
             <h2 className="help-app-title">Hand-Written Digit Recognizer</h2>
-            <p className="help-app-intro-body">Draw any digit 0-9 using your mouse or touch-screen and a nueral network will predict what you drew. <strong>For best results, please draw large and vertically straight characters at center of canvas.</strong>
-              Feel free to experiment with different shapes and forms for digits.
+            <p className="help-app-intro-body">Draw any digit 0-9 using your mouse or touch-screen and a nueral network will predict what you drew. <strong> For best results, please draw large and vertically straight characters at center of canvas. </strong>
+               Feel free to experiment with different shapes and forms for digits.</p>
+            
+            <p>
+              The recognizer is really accurate but unfortunately since it runs in browser it only uses 28x28px image of your drawing to make prediction with limited resources. If you feel like recognizer is making inaccurate results check the image recognizer used by looking at canvas labelled "What Neural Network Saw".
             </p>
             <h3 className="help-app-under-the-hood-title">Under the Hood</h3>
             <p className="help-app-under-the-hood-body">There is a Convolutional Nueral Network working behind the scene. It was trained on MNIST dataset and code used for training the nueral network can be found here: <a href="https://arshsekhon.github.io">https://arshsekhon.github.io</a></p>

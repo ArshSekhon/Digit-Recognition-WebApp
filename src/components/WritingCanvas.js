@@ -182,6 +182,7 @@ class WritingCanvas extends Component{
       
       */
       return (
+        <div>
           <div className="digit-recognizer-container"> 
                 <div className="digit-recognizer-sub-container draw-here-container">
                   <div className="row"><h2 className="col-sm-12 align-self-start">DRAW HERE</h2></div>
@@ -223,7 +224,7 @@ class WritingCanvas extends Component{
                             }
                         }/>
                   </div>
-                <div className="predictions-bar-graph col-sm-4">
+                <div className="digit-recognizer-sub-container prediction-graph-container">
                   <div className="row"><h2 className="col-sm-12 align-self-start">PREDICTIONS</h2></div>
                     <ReactD3.BarChart 
                     className="row"
@@ -239,17 +240,19 @@ class WritingCanvas extends Component{
                       margin={{top: 10, bottom: 50, left: 50, right: 10}}/>
                 </div>
  
-                <div className="col-sm-4">
+                <div className="digit-recognizer-sub-container x28Canvas-container">
                   <div className="row x28Canvas"><h2 className="col-sm-12 align-self-start">WHAT NEURAL NETWORK SAW</h2></div>
                   <canvas height={28} width={28} id="mnist-canvas" className="row"></canvas>
                 </div>
 
                 
+            
             </div>
-            <div className="row align-items-center clear-button-row">
-                  <div className="col-sm-12 align-self-center">
-                    <button onClick={this.clearCanvas} className="btn clear-button" onChange={() => {}}>Clear Everything</button>   
-                  </div> 
+            <div className="align-items-center clear-button-row">
+                    <div className="col-sm-12 align-self-center">
+                      <button onClick={this.clearCanvas} className="btn clear-button" onChange={() => {}}>Clear Everything</button>   
+                    </div> 
+            </div>
           </div>
             
         )
@@ -349,24 +352,25 @@ class WritingCanvas extends Component{
           let predictedDigit = null;
           var previousPredictions = this.state.predictions;
           
-          console.log(previousPredictions)
+          //console.log(previousPredictions)
           Object.entries(output).forEach(([digit, probability]) => {
             if (probability > predictionProbability) {
               predictionProbability = probability;
               predictedDigit = digit;
             }
             previousPredictions[digit].y = probability*100;
-
+            /*
             console.log(
               `Predicted ${digit} with probability ${probability.toFixed(3)}.`,
-            );
+            );*/
           });
           
           this.setState({predictions:previousPredictions})
+          /*
           console.log(
             `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\
             Final Prediction is ${predictedDigit}!!!!.\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`,
-          );
+          );*/
         })
         .catch((error) => {
           console.log(error);
