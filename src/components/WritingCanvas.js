@@ -105,82 +105,7 @@ class WritingCanvas extends Component{
     }
 
 
-    render () { 
-      /*
-      
-        <div className="container">
-            <div className="row justify-content-center align-items-center align-self-center">
-                <div className="col-sm-4">
-                  <div className="row"><h2 className="col-sm-12 align-self-start">DRAW HERE</h2></div>
-                  
-                  <canvas id="draw" className="writing-canvas" width={this.props.width} height={this.props.height} 
-                        onMouseMove={(e)=>{
-                                    this.draw(e); 
-                        }}
-                        onMouseDown={(e) => {
-                            this.setState({
-                                isDrawing: true,
-                                lastX: e.nativeEvent.offsetX,
-                                lastY: e.nativeEvent.offsetY
-                            });
-                            if(e.nativeEvent.offsetX >=0 && e.nativeEvent.offsetY >= 0)  
-                            {	  
-                              this.coords.push({
-                                                'x':e.nativeEvent.offsetX,
-                                                'y':e.nativeEvent.offsetY
-                                                }); 
-                            }}
-                        }
-                        onMouseUp={
-                            (e) => {this.setState({isDrawing: false})
-                                if(e.nativeEvent.offsetX >=0 && e.nativeEvent.offsetY >= 0)  
-                                {	  
-                                  this.coords.push({
-                                                    'x':e.nativeEvent.offsetX,
-                                                    'y':e.nativeEvent.offsetY
-                                                    }); 
-                                }
-                                this.predictDigit(e);
-                            }
-                        }
-                        onMouseOut={
-                            (e) => {
-                              this.setState({isDrawing: false});
-                              this.predictDigit(e);
-                            }
-                        }/>
-                  </div>
-                <div className="predictions-bar-graph col-sm-4">
-                  <div className="row"><h2 className="col-sm-12 align-self-start">PREDICTIONS</h2></div>
-                    <ReactD3.BarChart 
-                    className="row"
-                      data={[{
-                          label: 'Numbers',
-                          values: this.state.predictions
-                      }]}
-                      tooltipHtml={(x,y,y0)=>{return "Probability of being "+x+" is "+Math.round(parseFloat(y0) * 10)/10+"% "}}
-                      width={this.state.width}
-                      height={this.state.height}
-                      xAxis={{label: "Digit"}}
-                      yAxis={{label: "Probability"}}
-                      margin={{top: 10, bottom: 50, left: 50, right: 10}}/>
-                </div>
- 
-                <div className="col-sm-4">
-                  <div className="row x28Canvas"><h2 className="col-sm-12 align-self-start">WHAT NEURAL NETWORK SAW</h2></div>
-                  <canvas height={28} width={28} id="mnist-canvas" className="row"></canvas>
-                </div>
-
-                
-            </div>
-            <div className="row align-items-center clear-button-row">
-                  <div className="col-sm-12 align-self-center">
-                    <button onClick={this.clearCanvas} className="btn clear-button" onChange={() => {}}>Clear Everything</button>   
-                  </div>
-            </div>
-          </div>
-      
-      */
+    render () {  
       return (
         <div>
           <div className="digit-recognizer-container"> 
@@ -288,9 +213,11 @@ class WritingCanvas extends Component{
         var top = mbb.min.y*dpi-top_left_adjustment;
         var margin = 50;
            
+        
+        var dpr = window.devicePixelRatio || 1;
         if(height>0 && width>0)
           try{
-            this.processImageWithModel(this.ctx().getImageData(left, top, width, height))
+            this.processImageWithModel(this.ctx().getImageData(left/dpr, top/dpr, width/dpr, height/dpr))
           }catch(e){}
           
     }
