@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.2/workbox-sw.js");
 
 importScripts(
-  "/Digit-Recognition-WebApp/precache-manifest.ba4762001849b218488a2257cdeeaac9.js"
+  "/Digit-Recognition-WebApp/precache-manifest.91b1ef1b9bf1a843fdceedac6eb48ec0.js"
 );
 
 workbox.clientsClaim();

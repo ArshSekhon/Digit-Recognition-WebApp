@@ -24,7 +24,7 @@ self.__precacheManifest = [
     "url": "/Digit-Recognition-WebApp/static/media/logo.5d5d9eef.svg"
   },
   {
-    "revision": "ee2e5a6d5be03518d41deea22429d72b",
+    "revision": "73e8ca9cdd700a3169d85b661d41ed1e",
     "url": "/Digit-Recognition-WebApp/index.html"
   }
 ];
