@@ -1,7 +1,7 @@
 {
   "main.css": "/Digit-Recognition-WebApp/static/css/main.cb5f2bee.chunk.css",
-  "main.js": "/Digit-Recognition-WebApp/static/js/main.28792dee.chunk.js",
-  "main.js.map": "/Digit-Recognition-WebApp/static/js/main.28792dee.chunk.js.map",
+  "main.js": "/Digit-Recognition-WebApp/static/js/main.54689d9e.chunk.js",
+  "main.js.map": "/Digit-Recognition-WebApp/static/js/main.54689d9e.chunk.js.map",
   "static/css/1.500be5cb.chunk.css": "/Digit-Recognition-WebApp/static/css/1.500be5cb.chunk.css",
   "static/js/1.ecb74c6c.chunk.js": "/Digit-Recognition-WebApp/static/js/1.ecb74c6c.chunk.js",
   "static/js/1.ecb74c6c.chunk.js.map": "/Digit-Recognition-WebApp/static/js/1.ecb74c6c.chunk.js.map",
@@ -11,6 +11,6 @@
   "static/css/main.cb5f2bee.chunk.css.map": "/Digit-Recognition-WebApp/static/css/main.cb5f2bee.chunk.css.map",
   "static/css/1.500be5cb.chunk.css.map": "/Digit-Recognition-WebApp/static/css/1.500be5cb.chunk.css.map",
   "index.html": "/Digit-Recognition-WebApp/index.html",
-  "precache-manifest.c0985f1a17c2e23e48efacf29b51a02c.js": "/Digit-Recognition-WebApp/precache-manifest.c0985f1a17c2e23e48efacf29b51a02c.js",
+  "precache-manifest.ba4762001849b218488a2257cdeeaac9.js": "/Digit-Recognition-WebApp/precache-manifest.ba4762001849b218488a2257cdeeaac9.js",
   "service-worker.js": "/Digit-Recognition-WebApp/service-worker.js"
 }

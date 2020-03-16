@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "28792dee11bc49d7f17e",
+    "revision": "54689d9e3e40243f8512",
     "url": "/Digit-Recognition-WebApp/static/css/main.cb5f2bee.chunk.css"
   },
   {
-    "revision": "28792dee11bc49d7f17e",
-    "url": "/Digit-Recognition-WebApp/static/js/main.28792dee.chunk.js"
+    "revision": "54689d9e3e40243f8512",
+    "url": "/Digit-Recognition-WebApp/static/js/main.54689d9e.chunk.js"
   },
   {
     "revision": "ecb74c6ccd351abe8052",
@@ -24,7 +24,7 @@ self.__precacheManifest = [
     "url": "/Digit-Recognition-WebApp/static/media/logo.5d5d9eef.svg"
   },
   {
-    "revision": "a0e78b761adffdad79cfb0a25e5a5e87",
+    "revision": "ee2e5a6d5be03518d41deea22429d72b",
     "url": "/Digit-Recognition-WebApp/index.html"
   }
 ];
